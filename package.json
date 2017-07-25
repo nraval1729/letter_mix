@@ -1,0 +1,23 @@
+{
+  "name": "letter_mix",
+  "version": "1.0.0",
+  "description": "A fun, challenging letter mix game!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nraval1729/letter_mix.git"
+  },
+  "author": "nrawal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nraval1729/letter_mix/issues"
+  },
+  "homepage": "https://github.com/nraval1729/letter_mix#readme",
+  "dependencies": {
+    "osmosis": "^1.1.4",
+    "random-words": "0.0.1"
+  }
+}
