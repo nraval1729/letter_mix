@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/nraval1729/letter_mix#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
     "osmosis": "^1.1.4",
     "random-words": "0.0.1"
   }
