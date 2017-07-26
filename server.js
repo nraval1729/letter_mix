@@ -14,13 +14,19 @@ app.set('view engine', 'html');
 var randomWord = require('random-words');
 
 // To scrape the http://www.allscrabblewords.com/unscramble/ page
-var osmosis = require('osmosis');
+var request = require('request');
+var cheerio = require('cheerio');
+
+// To get difference of arrays
+var _ = require('underscore');
 
 // Handlers
 app.get("/", function(req, res) {
 	console.log("Got to the home page!");
 	var rw = randomWord();
-	res.render("index.html", {rw: shuffleString(rw)});
+	var validWords = getAllValidWordsFrom(rw);
+	console.log("got all valid words: " +validWords);
+	res.render("index.html", {rw: shuffleString(rw), vws: validWords});
 });
 
 
@@ -36,6 +42,34 @@ function shuffleString(s) {
         a[j] = tmp;
     }
     return a.join("");
+}
+
+function getAllValidWordsFrom(rw) {
+	console.log("url: "+ "http://www.allscrabblewords.com/unscramble/" +rw);
+
+	request("http://www.allscrabblewords.com/unscramble/" +rw, function (error, response, body) {
+  	console.log('ERROR:', error);
+  	console.log("Loading html into cheerio");
+
+  	var $ = cheerio.load(body);
+
+  	// All words
+  	var allWordLinks = $('div.panel-body.unscrambled').find('ul > li> a')
+  	var allWords = [];
+  	for(var i=0; i<allWordLinks.length; i++) {
+  		allWords.push($(allWordLinks[i]).text());
+  	}
+
+  	// Words formed by adding one extra letter
+  	var oneExtraLetterWordLinks = $('div.panel-body.unscrambled').last().find('ul > li> a')
+  	var oneExtraLetterWords = []
+  	for(var i=0; i<oneExtraLetterWordLinks.length; i++) {
+  		oneExtraLetterWords.push($(oneExtraLetterWordLinks[i]).text());
+  	}
+
+  	// Just the valid words i.e no extra letter words
+  	var allValidWords = _.difference(allWords, oneExtraLetterWords)
+	});
 }
 
 app.listen(process.env.PORT || 5000);
